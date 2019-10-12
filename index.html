@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Blockly</title>
+
+    <script src="blockly_compressed.js"></script>
+    <script src="blocks_compressed.js"></script>
+
+    <script src="led_field.js"></script>
+    <script src="custom_blocks.js"></script>
+    <script src="code_generator.js"></script>
+
+    <script src="msg/js/en.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .led {
+            cursor: pointer;
+        }
+
+        .led_bg {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Yksinkertaisempi yksinkertainen kuvauskieli</h1>
+
+    <div id="blocklyDiv" style="height: 600px; width: 1000px;"></div>
+
+    <xml id="toolbox" style="display: none">
+        <block type="led_animation"></block>
+
+        <block type="led_brightness"></block>
+        <block type="led_wait"></block>
+        <block type="led_stop"></block>
+
+        <block type="led_all"></block>
+        <block type="led_position"></block>
+        <block type="led_select"></block>
+    </xml>
+
+    <xml id="startBlocks" style="display: none">
+        <block type="led_start" deletable="false" inline="false" x="40" y="40">
+            <next>
+                <block type="led_animation"></block>
+            </next>
+        </block>
+    </xml>
+
+    <button onclick="GenerateCode()">Generate Code</button>
+
+    <script>
+        var workspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
+        Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), workspace);
+
+        function GenerateCode() {
+            var code = Blockly.CodeGen.workspaceToCode(workspace).split(" ").join("");
+            console.log(code);
+        }
+    </script>
+</body>
+</html>

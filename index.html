@@ -56,6 +56,8 @@
     </xml>
 
     <button onclick="GenerateCode()">Generate Code</button>
+    <br>
+    <textarea id="codeArea" cols="70" rows="10"></textarea>
 
     <script>
         var workspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
@@ -64,7 +66,10 @@
         function GenerateCode() {
             var code = Blockly.CodeGen.workspaceToCode(workspace).split(" ").join("");
             console.log(code);
+
+            document.getElementById("codeArea").innerHTML = code;
         }
+        workspace.addChangeListener(GenerateCode);
     </script>
 </body>
 </html>

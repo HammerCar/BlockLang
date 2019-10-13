@@ -33,12 +33,17 @@
 <body>
     <h1>Yksinkertaisempi yksinkertainen kuvauskieli</h1>
 
-    <div id="blocklyDiv" style="height: 600px; width: 1000px;"></div>
+    <div id="blocklyDiv" style="height: 660px; width: 1000px;"></div>
 
     <xml id="toolbox" style="display: none">
         <block type="led_animation"></block>
 
         <block type="led_brightness"></block>
+        <block type="led_dim"></block>
+        <block type="led_brighten"></block>
+        <block type="led_blink"></block>
+        
+        <block type="led_move"></block>
         <block type="led_wait"></block>
         <block type="led_stop"></block>
 
@@ -54,9 +59,7 @@
             </next>
         </block>
     </xml>
-
-    <button onclick="GenerateCode()">Generate Code</button>
-    <br>
+    
     <textarea id="codeArea" cols="70" rows="10"></textarea>
 
     <script>
@@ -64,7 +67,14 @@
         Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), workspace);
 
         function GenerateCode() {
-            var code = Blockly.CodeGen.workspaceToCode(workspace).split(" ").join("");
+            var code = Blockly.CodeGen.workspaceToCode(workspace).split(" ").join("").split("\n");
+            for (var line in code) {
+                if (code[line].substr(0, 1) === "|") {
+                    code = code[line].substr(1, code[line].length);
+                    break;
+                }
+            }
+
             console.log(code);
 
             document.getElementById("codeArea").innerHTML = code;

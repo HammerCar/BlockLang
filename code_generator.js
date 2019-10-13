@@ -9,7 +9,7 @@ Blockly.CodeGen.scrub_ = function(block, code, opt_thisOnly) {
     var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
     var nextCode = opt_thisOnly ? '' : Blockly.CodeGen.blockToCode(nextBlock);
     return code + nextCode;
-  };
+};
 
 Blockly.CodeGen.scrubNakedValue = function(line) {
     return line + '\n';
@@ -18,7 +18,7 @@ Blockly.CodeGen.scrubNakedValue = function(line) {
 
 
 Blockly.CodeGen['led_start'] = function(block) {
-    return "";
+    return "|";
 };
 
 Blockly.CodeGen['led_animation'] = function(block) {
@@ -32,15 +32,15 @@ Blockly.CodeGen['led_animation'] = function(block) {
 
 
 
-Blockly.CodeGen['led_brightness'] = function(block) {
+function GetLedEffectCode(block, effect) {
     var leds = Blockly.CodeGen.valueToCode(block, 'LEDS', 0);
-    if (leds === "")
-        return "";
-
-    leds = JSON.parse(leds);
     var brightness = block.getFieldValue('BRIGHTNESS');
     
-    var code = "e0" + brightness.toString(16);
+    if (leds === "")
+        return "";
+    leds = JSON.parse(leds);
+    
+    var code = "e" + effect.toString(16) + brightness.toString(16);
 
     if (leds === true) {
         return code + "a";
@@ -54,6 +54,39 @@ Blockly.CodeGen['led_brightness'] = function(block) {
 
         return code;
     }
+}
+
+Blockly.CodeGen['led_brightness'] = function(block) {
+    return GetLedEffectCode(block, 0);
+};
+
+Blockly.CodeGen['led_dim'] = function(block) {
+    return GetLedEffectCode(block, 1);
+};
+
+Blockly.CodeGen['led_brighten'] = function(block) {
+    return GetLedEffectCode(block, 3);
+};
+
+Blockly.CodeGen['led_blink'] = function(block) {
+    var dir = block.getFieldValue('DIR');
+    return GetLedEffectCode(block, dir === "MIN" ? 5 : 7);
+};
+
+
+
+Blockly.CodeGen['led_move'] = function(block) {
+    var direction = block.getFieldValue('DIR');
+    var count = block.getFieldValue('COUNT');
+    
+    var dirNum = 0;
+
+    if (direction.includes('W')) dirNum += 1;
+    if (direction.includes('N')) dirNum += 2;
+    if (direction.includes('E')) dirNum += 4;
+    if (direction.includes('S')) dirNum += 8;
+    
+    return "p" + dirNum.toString(16) + count.toString(16);
 };
 
 Blockly.CodeGen['led_wait'] = function(block) {

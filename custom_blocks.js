@@ -63,10 +63,129 @@ Blockly.defineBlocksWithJsonArray([
         ],
         "previousStatement": "Action",
         "nextStatement": "Action",
-        "colour": 160,
+        "colour": 100,
         "tooltip": "Sets brightness of led(s)"
     },
+
+    // Dim brightness of led(s)
+    {
+        "type": "led_dim",
+        "message0": 'Dim brightness of %1 from %2 to 0',
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "LEDS",
+                "check": "Leds"
+            },
+            {
+                "type": "field_number",
+                "name": "BRIGHTNESS",
+                "value": 15,
+                "min": 0,
+                "max": 15,
+                "precision": 1
+            }
+        ],
+        "previousStatement": "Action",
+        "nextStatement": "Action",
+        "colour": 100,
+        "tooltip": "Dims brightness of led(s)"
+    },
+
+    // Brighten brightness of led(s)
+    {
+        "type": "led_brighten",
+        "message0": 'Brighten brightness of %1 from %2 to 15',
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "LEDS",
+                "check": "Leds"
+            },
+            {
+                "type": "field_number",
+                "name": "BRIGHTNESS",
+                "value": 0,
+                "min": 0,
+                "max": 15,
+                "precision": 1
+            }
+        ],
+        "previousStatement": "Action",
+        "nextStatement": "Action",
+        "colour": 100,
+        "tooltip": "Brightens brightness of led(s)"
+    },
     
+    // blink led(s)
+    {
+        "type": "led_blink",
+        "message0": 'Animate brightness of %1 from %2 to %3 and back',
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "LEDS",
+                "check": "Leds"
+            },
+            {
+                "type": "field_number",
+                "name": "BRIGHTNESS",
+                "value": 0,
+                "min": 0,
+                "max": 15,
+                "precision": 1
+            },
+            {
+                "type": "field_dropdown",
+                "name": "DIR",
+                "options": [
+                    [ "0", "MIN" ],
+                    [ "15", "MAX" ]
+                ]
+            }
+        ],
+        "previousStatement": "Action",
+        "nextStatement": "Action",
+        "colour": 100,
+        "tooltip": "Animates led(s) to blink"
+    },
+
+
+
+    // Move leds to a directions
+    {
+        "type": "led_move",
+        "message0": 'Move leds to %1 %2 times',
+        "args0": [
+            {
+                "type": "field_dropdown",
+                "name": "DIR",
+                "options": [
+                    [ "↑", "N" ],
+                    [ "↗", "NE" ],
+                    [ "→", "E" ],
+                    [ "↘", "SE" ],
+                    [ "↓", "S" ],
+                    [ "↙", "SW" ],
+                    [ "←", "W" ],
+                    [ "↖", "NW" ]
+                ]
+            },
+            {
+                "type": "field_number",
+                "name": "COUNT",
+                "value": 1,
+                "min": 0,
+                "max": 15,
+                "precision": 1
+            }
+        ],
+        "previousStatement": "Action",
+        "nextStatement": "Action",
+        "colour": 160,
+        "tooltip": "Moves leds to a directions"
+    },
+
     // Wait for milliseconds
     {
         "type": "led_wait",

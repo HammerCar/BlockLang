@@ -28,12 +28,28 @@
         .led_bg {
             cursor: pointer;
         }
+
+        .resizeDiv {
+            
+        }
+
+        .resizeBtn {
+            width: 100%;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
     <h1>Yksinkertaisempi yksinkertainen kuvauskieli</h1>
 
-    <div id="blocklyDiv" style="height: 660px; width: 1000px;"></div>
+    <div class="resizeDiv">
+        <button class="resizeBtn" onclick="AddHeight(100)">Height +100</button>
+        <button class="resizeBtn" onclick="AddHeight(-100)">Height -100</button>
+    </div>
+
+    <div id="blocklyArea" style="width: 1000px; height: 600px;">
+        <div id="blocklyDiv" style="position: absolute"></div>
+    </div>
 
     <xml id="toolbox" style="display: none">
         <block type="led_animation"></block>
@@ -59,12 +75,52 @@
             </next>
         </block>
     </xml>
+
     
-    <textarea id="codeArea" cols="70" rows="10"></textarea>
+    <p>Generated code</p>
+    <textarea id="codeArea" cols="70" rows="10" style="width: 100%"></textarea>
 
     <script>
-        var workspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
+        var blocklyArea = document.getElementById('blocklyArea');
+        var blocklyDiv = document.getElementById('blocklyDiv');
+        var workspace = Blockly.inject(blocklyDiv, {toolbox: document.getElementById('toolbox')});
         Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), workspace);
+
+        var onresize = function(e) {
+            // Compute the absolute coordinates and dimensions of blocklyArea.
+            var element = blocklyArea;
+            var x = 0;
+            var y = 0;
+
+            blocklyArea.style.width = document.body.clientWidth + "px";
+
+            do {
+                x += element.offsetLeft;
+                y += element.offsetTop;
+                element = element.offsetParent;
+            } while (element);
+
+            // Position blocklyDiv over blocklyArea.
+            blocklyDiv.style.left = x + 'px';
+            blocklyDiv.style.top = y + 'px';
+            blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+            blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+            Blockly.svgResize(workspace);
+        };
+        window.addEventListener('resize', onresize, false);
+        onresize();
+        Blockly.svgResize(workspace);
+
+        var areaHeight = 700;
+        function AddHeight(h) {
+            areaHeight += h;
+            if (areaHeight < 700)
+                areaHeight = 700;
+
+            blocklyArea.style.height = areaHeight + "px";
+            onresize();
+        }
+        AddHeight(0);
 
         function GenerateCode() {
             var code = Blockly.CodeGen.workspaceToCode(workspace).split(" ").join("").split("\n");

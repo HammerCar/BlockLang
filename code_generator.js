@@ -45,12 +45,12 @@ function GetLedEffectCode(block, effect) {
     if (leds === true) {
         return code + "a";
     } else if (leds.x !== undefined) {
-        return code + "s" + (15 - leds.y).toString(16) + leds.x.toString(16);
+        return code + "s" + leds.y.toString(16) + leds.x.toString(16);
     } else {
         for (let x = 0; x < 16; x++)
             for (let y = 0; y < 16; y++)
                 if (leds.leds[x][y].value)
-                    code += "s" + (15 - y).toString(16) + x.toString(16);
+                    code += "s" + y.toString(16) + x.toString(16);
 
         return code;
     }
